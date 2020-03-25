@@ -5,7 +5,7 @@ const uniqueValidator = require("mongoose-unique-validator");
 const Schema = mongoose.Schema;
 var passportLocalMongoose = require("passport-local-mongoose");
 
-const UsersSchema = new Schema({
+const UserSchema = new Schema({
  
   Name: String,
   Email: {type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true},
@@ -17,18 +17,13 @@ const UsersSchema = new Schema({
   salt: String
 }, {timestamps: true});
 
+UserSchema.plugin(uniqueValidator, { message: "is already taken." });
 
-
-
-UsersSchema.plugin(uniqueValidator, { message: "is already taken." });
-
-UsersSchema.virtual('date')
+UserSchema.virtual('date')
   .get(() => this._id.getTimestamp());
 
-UsersSchema.plugin(passportLocalMongoose);
+UserSchema.plugin(passportLocalMongoose, { usernameField : 'email' });
 
-
-
-mongoose.model('Users', UsersSchema);
+module.exports = mongoose.model('User', UserSchema);
 
 

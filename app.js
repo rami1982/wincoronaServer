@@ -4,11 +4,7 @@ const glob = require("glob");
 const mongoose = require("mongoose");
 
 var passport = require("passport"),
-  bodyParser = require("body-parser"),
-  LocalStrategy = require("passport-local"),
-  passportLocalMongoose = require("passport-local-mongoose");
-
-  
+  bodyParser = require("body-parser");
 
 mongoose.connect(config.db);
 const db = mongoose.connection;
@@ -22,31 +18,30 @@ models.forEach(function(model) {
 });
 const app = express();
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
-// // PASSPORT CONFIGURATION
-// app.use(require("express-session")({
-//     secret: "Once again Rusty wins cutest dog!",
-//     resave: false,
-//     saveUninitialized: false
-// }));
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-// passport.use(new LocalStrategy(Users.authenticate()));
-// passport.serializeUser(Userss.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
-
-// app.use(function(req, res, next){
-//    res.locals.currentUser = req.user;
-//    res.locals.success = req.flash('success');
-//    res.locals.error = req.flash('error');
-//    next();
-// });
 
 module.exports = require("./config/express")(app, config);
 
+app.use(
+  require("express-session")({
+    secret: "Once again Rusty wins cutest dog!",
+    resave: false,
+    saveUninitialized: false
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(function(req, res, next) {
+  res.locals.currentUser = req.user;
+  // res.locals.success = req.flash("success");
+  // res.locals.error = req.flash("error");
+  next();
+});
+
+require('./config/passport');
 
 
 function isLoggedIn(req, res, next) {
