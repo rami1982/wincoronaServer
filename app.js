@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 
 var passport = require("passport"),
   bodyParser = require("body-parser");
+var flash = require('connect-flash');
 
 mongoose.connect(config.db);
 const db = mongoose.connection;
@@ -18,10 +19,7 @@ models.forEach(function(model) {
 });
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-module.exports = require("./config/express")(app, config);
+app.use(flash());
 
 app.use(
   require("express-session")({
@@ -31,13 +29,20 @@ app.use(
   })
 );
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+module.exports = require("./config/express")(app, config);
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 app.use(function(req, res, next) {
   res.locals.currentUser = req.user;
-  // res.locals.success = req.flash("success");
-  // res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
   next();
 });
 

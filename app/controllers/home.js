@@ -19,9 +19,12 @@ function capitalizeFirstLetter(string) {
 }
 
 module.exports = app => {
+  app.use(passport.initialize());
+  app.use(passport.session());
   app.use("/", router);
-  app.use('/user', passport.authenticate('jwt', {session: false}), user);
+  // app.use('/user', passport.authenticate('jwt', {session: false}), user);
   app.use('/auth', auth);
+
 };
 
 router.get("/secret", (req, res, next) => {

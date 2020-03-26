@@ -8,23 +8,26 @@ const JWTStrategy   = passportJWT.Strategy;
 
 const User = require('../app/models/user');
 
-passport.use(User.createStrategy());
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+}, User.authenticate())); 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-passport.use(new JWTStrategy({
-        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-        secretOrKey   : 'your_jwt_secret'
-    },
-    function (jwtPayload, cb) {
+// passport.use(new JWTStrategy({
+//         jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+//         secretOrKey   : 'your_jwt_secret'
+//     },
+//     function (jwtPayload, cb) {
 
-        //find the user in db if needed
-        return User.findOneById(jwtPayload.id)
-            .then(user => {
-                return cb(null, user);
-            })
-            .catch(err => {
-                return cb(err);
-            });
-    }
-));
+//         //find the user in db if needed
+//         return User.findOneById(jwtPayload.id)
+//             .then(user => {
+//                 return cb(null, user);
+//             })
+//             .catch(err => {
+//                 return cb(err);
+//             });
+//     }
+// ));

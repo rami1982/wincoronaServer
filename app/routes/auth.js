@@ -8,18 +8,17 @@ const User = require('../models/user');
 
 router.post('/register', function(req, res) { 
       
-    Users=new User({email: req.body.email}); 
-  
-          User.register(Users, req.body.password, function(err, user) { 
-            if (err) { 
-              res.json({success:false, message:"Your account could not be saved. Error: ", err})  
-            }else{ 
-              res.json({success: true, message: "Your account has been saved"}) 
-            } 
-          }); 
+    User.register(new User({email: req.body.email}), req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            return res.render("register");
+        }
+        passport.authenticate("local")(req, res, function(){
+            res.redirect("/secret");
+        });
+    });
 }); 
 
-/* POST login. */
 router.post('/login', function (req, res, next) {
 
     passport.authenticate('local', {session: false}, (err, user, info) => {
@@ -36,7 +35,7 @@ router.post('/login', function (req, res, next) {
                 res.send(err);
             }
 
-            const token = jwt.sign(user, 'your_jwt_secret');
+            const token = jwt.sign(user.toJSON(), 'your_jwt_secret');
 
             return res.json({user, token});
         });
