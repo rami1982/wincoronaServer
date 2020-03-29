@@ -8,9 +8,11 @@
     "test": "NODE_ENV=test mocha --recursive test",
     "test:coverage": "nyc npm test",
     "test:unit": "mocha --recursive test/middleware test/models test/routes",
-    "test:integration": "mocha --recursive test/integration"
+    "test:integration": "mocha --recursive test/integration",
+    "dev": "nodemon"
   },
   "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.13.3",
     "compression": "^1.5.2",
     "connect-flash": "^0.1.1",
@@ -26,12 +28,12 @@
     "mongoose-unique-validator": "^2.0.3",
     "morgan": "^1.6.1",
     "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.0.1",
     "serve-favicon": "^2.3.0"
   },
   "devDependencies": {
+    "nodemon": "^2.0.2",
     "chai": "^3.5.0",
     "debug": "^2.2.0",
     "grunt": "^1.0.1",

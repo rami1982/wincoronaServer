@@ -7,6 +7,8 @@ const cookieParser = require('cookie-parser');
 const compress = require('compression');
 const methodOverride = require('method-override');
 const cors = require('cors');
+const dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = (app, config) => {
   const env = process.env.NODE_ENV || 'development';
@@ -17,8 +19,7 @@ module.exports = (app, config) => {
   app.set('view engine', 'ejs');
 
   // app.use(favicon(config.root + '/public/img/favicon.ico'));
-  app.use(cors());
-  app.options('*', cors());
+  app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
   app.use(logger('dev'));
   app.use(cookieParser());
   app.use(compress());
