@@ -7,6 +7,8 @@ const cookieParser = require('cookie-parser');
 const compress = require('compression');
 const methodOverride = require('method-override');
 const cors = require('cors');
+const dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = (app, config) => {
   const env = process.env.NODE_ENV || 'development';
