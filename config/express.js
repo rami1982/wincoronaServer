@@ -4,7 +4,6 @@ const glob = require('glob');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
-const compress = require('compression');
 const methodOverride = require('method-override');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -22,7 +21,6 @@ module.exports = (app, config) => {
   app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
   app.use(logger('dev'));
   app.use(cookieParser());
-  app.use(compress());
   app.use(express.static(config.root + '/public'));
   app.use(methodOverride());
 

@@ -12,7 +12,7 @@ passport.deserializeUser(function(id, done) {
     });
 });
 
-passport.use('local-login', new LocalStrategy({
+passport.use('local-signin', new LocalStrategy({
     usernameField : 'email',
     passwordField : 'password',
     passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)

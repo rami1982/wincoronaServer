@@ -5,17 +5,38 @@ const passport = require('passport');
 
 const utils = require('../../utils');
 
-router.post('/signup', passport.authenticate('local-signup', {
-    successRedirect : '../profile', 
-    // failureRedirect : 'signup', 
-    failureFlash : true 
-}));
+router.post('/signup', function (req, res, next) {
+    passport.authenticate('local-signup', function (error, user, info) {
+      if (error) {
+        res.status(401).send(error);
+      } else if (!user) {
+        res.status(401).send(info);
+      } else {
+        res.status(200).json({
+            'message': 'successfully signed up'
+        });
+      }
 
-router.post('/signin', passport.authenticate('local-login', {
-    successRedirect : '../profile',
-    // failureRedirect : 'signin',
-    failureFlash : true 
-    })
+      res.status(401).send(info);
+    })(req, res);
+  }
+);
+
+router.post('/signin', function (req, res, next) {
+    passport.authenticate('local-signin', function (error, user, info) {
+      if (error) {
+        res.status(401).send(error);
+      } else if (!user) {
+        res.status(401).send(info);
+      } else {
+        res.status(200).json({
+            'message': 'successfully signed in'
+        });
+      }
+
+      res.status(401).send(info);
+    })(req, res);
+  }
 );
 
 router.get('/logout', utils.isLoggedIn, (req, res) => {
