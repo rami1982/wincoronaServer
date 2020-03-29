@@ -49,14 +49,6 @@ app.use(function(req, res, next) {
 require('./config/passport');
 
 
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-}
-
-
 app.listen(config.port, () => {
   console.log("Express server listening on port " + config.port);
 });

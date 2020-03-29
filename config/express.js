@@ -17,8 +17,7 @@ module.exports = (app, config) => {
   app.set('view engine', 'ejs');
 
   // app.use(favicon(config.root + '/public/img/favicon.ico'));
-  app.use(cors());
-  app.options('*', cors());
+  app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
   app.use(logger('dev'));
   app.use(cookieParser());
   app.use(compress());
