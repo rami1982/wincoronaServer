@@ -3,7 +3,8 @@ const router  = express.Router();
 
 const passport = require('passport');
 
-const utils = require('../../utils');
+const utils = require('../utils');
+const User = require('../models/user');
 
 router.post('/signup', function (req, res, next) {
     passport.authenticate('local-signup', function (error, user, info) {
@@ -29,12 +30,15 @@ router.post('/signin', function (req, res, next) {
       } else if (!user) {
         res.status(401).send(info);
       } else {
-        res.status(200).json({
-            'message': 'successfully signed in'
-        });
+        req.login(user, (err) => {
+          if (err) {
+              res.send(err);
+          }
+          res.status(200).json({
+              'message': 'successfully signed in'
+          });
+        })
       }
-
-      res.status(401).send(info);
     })(req, res);
   }
 );
@@ -44,6 +48,19 @@ router.get('/logout', utils.isLoggedIn, (req, res) => {
     res.status(200).json({
         'message': 'successfully logout'
     });
+});
+
+router.delete('/delete', utils.isLoggedIn, (req, res) => {
+  User.findOne({ '_id' :  req.user.id }, function(err, user) {
+      if (!err && user){
+        user.remove();
+        req.logout();
+        res.status(200).json({
+            'message': 'user successfully deleted'
+        });
+      }
+      else res.send(err);
+  });
 });
 
 module.exports = router;

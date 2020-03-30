@@ -1,11 +1,15 @@
-var mongoose = require("mongoose");
-var passportLocalMongoose = require("passport-local-mongoose");
+const mongoose = require("mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
-var bcrypt   = require('bcrypt-nodejs');
+const bcrypt   = require('bcrypt-nodejs');
+const one_time_questionnaire   = require('./one_time_questionnaire');
+const daily_questionnaire   = require('./daily_questionnaire');
 
-var UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     email: {type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true},
-    password: String
+    password: {type: String, required: [true, "can't be blank"]},
+    one_time_questionnaire: Object,
+    daily_questionnaire: [Object]
 }, {timestamps: true});
 
 UserSchema.methods.generateHash = function(passwordOrEmail) {

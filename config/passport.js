@@ -1,7 +1,7 @@
 const passport    = require('passport');
 
 const LocalStrategy = require('passport-local').Strategy;
-const User = require('../app/models/user');
+const User = require('../models/user');
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -15,11 +15,11 @@ passport.deserializeUser(function(id, done) {
 passport.use('local-signin', new LocalStrategy({
     usernameField : 'email',
     passwordField : 'password',
-    passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+    passReqToCallback : true 
 },
 function(req, email, password, done) {
     if (email)
-        email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
+        email = email.toLowerCase(); 
 
     process.nextTick(function() {
         User.findOne({ 'email' :  email }, function(err, user) {
@@ -27,7 +27,7 @@ function(req, email, password, done) {
                 return done(err);
 
             if (!user)
-                return done(null, false);
+                return done(null, false, {message: 'Email does not exist'});
 
             if (!user.validateHash(password))
                 return done(null, false);
@@ -42,11 +42,11 @@ function(req, email, password, done) {
 passport.use('local-signup', new LocalStrategy({
     usernameField : 'email',
     passwordField : 'password',
-    passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+    passReqToCallback : true 
 },
 function(req, email, password, done) {
     if (email)
-    email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
+    email = email.toLowerCase(); 
     
     process.nextTick(function() {
 

@@ -1,5 +1,5 @@
 {
-    "watch": ["app", "config"],
+    "watch": ["config","controllers","models","routes","tests"],
     "exec": "NODE_ENV=development node app.js",
     "ext": "js"
   }
