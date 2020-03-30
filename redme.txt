@@ -1,9 +1,0 @@
-to run 
-.\node_modules\.bin\grunt
-
-to reinstall
-.\node_modules\.bin\yo
-
-
-db
-'mongodb://asafstr:300753316qa@ds343718.mlab.com:43718/wincorona'
