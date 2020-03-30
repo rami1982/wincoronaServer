@@ -43,10 +43,10 @@ router.post('/signin', function (req, res, next) {
   }
 );
 
-router.get('/logout', utils.isLoggedIn, (req, res) => {
+router.get('/signout', utils.isLoggedIn, (req, res) => {
     req.logout();
     res.status(200).json({
-        'message': 'successfully logout'
+        'message': 'successfully signed out'
     });
 });
 
