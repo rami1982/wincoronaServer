@@ -5,9 +5,8 @@ const mongoose = require("mongoose");
 
 var passport = require("passport"),
   bodyParser = require("body-parser");
-var flash = require('connect-flash');
 
-mongoose.connect(config.db);
+mongoose.connect(config.db, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on("error", () => {
   throw new Error("unable to connect to database at " + config.db);
@@ -18,8 +17,6 @@ models.forEach(function(model) {
   require(model);
 });
 const app = express();
-
-app.use(flash());
 
 app.use(
   require("express-session")({

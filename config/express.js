@@ -7,7 +7,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
 
-var forms = require('../routes/forms');
+var questionnaire = require('../routes/questionnaire');
 var auth = require('../routes/auth');
 var profile = require('../routes/profile');
 
@@ -26,8 +26,8 @@ module.exports = (app, config) => {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use('/auth', auth);
-  app.use('/forms', forms);
-  app.use('/profile', profile);
+  app.use('/questionnaire', passport.authenticate('jwt', {session: false}), questionnaire);
+  app.use('/profile', passport.authenticate('jwt', {session: false}), profile);
 
   app.use((req, res, next) => {
     var err = new Error('Not Found');

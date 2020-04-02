@@ -1,5 +1,10 @@
 const passport    = require('passport');
 
+const passportJWT = require("passport-jwt");
+
+const ExtractJWT = passportJWT.ExtractJwt;
+const JWTStrategy   = passportJWT.Strategy;
+
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
 
@@ -64,3 +69,18 @@ function(req, email, password, done) {
     });
 
 }));
+
+passport.use(new JWTStrategy({
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    secretOrKey   : 'secretkey'
+},
+async (jwtPayload, cb) =>{
+    return User.findOne({_id: jwtPayload.userId})
+        .then(user => {
+            return cb(null, user);
+        })
+        .catch(err => {
+            return cb(err);
+        });
+}
+));

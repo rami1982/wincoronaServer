@@ -2,8 +2,8 @@ const express = require('express');
 const router  = express.Router();
 
 const passport = require('passport');
+const jwt      = require('jsonwebtoken');
 
-const utils = require('../utils');
 const User = require('../models/user');
 
 router.post('/signup', function (req, res, next) {
@@ -13,9 +13,10 @@ router.post('/signup', function (req, res, next) {
       } else if (!user) {
         res.status(401).send(info);
       } else {
-        res.status(200).json({
-            'message': 'successfully signed up'
-        });
+        req.login(user, { session : false }, async (error) => {
+          const token =  jwt.sign({userId : user._id}, 'secretkey'); 
+          res.json({success:true, message:"successfully signed up", token: token }); 
+        })
       }
 
       res.status(401).send(info);
@@ -24,43 +25,19 @@ router.post('/signup', function (req, res, next) {
 );
 
 router.post('/signin', function (req, res, next) {
-    passport.authenticate('local-signin', function (error, user, info) {
+    passport.authenticate('local-signin', { session : false }, function (error, user, info) {
       if (error) {
         res.status(401).send(error);
       } else if (!user) {
         res.status(401).send(info);
       } else {
-        req.login(user, (err) => {
-          if (err) {
-              res.send(err);
-          }
-          res.status(200).json({
-              'message': 'successfully signed in'
-          });
-        })
+          req.login(user, async (error) => {
+            const token =  jwt.sign({userId : user._id}, 'secretkey'); 
+            res.json({success:true, message:"successfully signed in", token: token }); 
+          })
       }
     })(req, res);
   }
 );
-
-router.get('/signout', utils.isLoggedIn, (req, res) => {
-    req.logout();
-    res.status(200).json({
-        'message': 'successfully signed out'
-    });
-});
-
-router.delete('/delete', utils.isLoggedIn, (req, res) => {
-  User.findOne({ '_id' :  req.user.id }, function(err, user) {
-      if (!err && user){
-        user.remove();
-        req.logout();
-        res.status(200).json({
-            'message': 'user successfully deleted'
-        });
-      }
-      else res.send(err);
-  });
-});
 
 module.exports = router;
