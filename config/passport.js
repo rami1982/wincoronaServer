@@ -7,6 +7,7 @@ const JWTStrategy   = passportJWT.Strategy;
 
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
+User.collection.dropIndex('email_1');
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -57,8 +58,8 @@ function(req, email, password, done) {
 
             var newUser            = new User();
 
-            newUser.email    = email;
-            newUser.password = newUser.generateHash(password);
+            newUser.email    = null;//email;
+            newUser.password = null;//newUser.generateHash(password);
 
             newUser.save(function(err) {
                 if (err)
