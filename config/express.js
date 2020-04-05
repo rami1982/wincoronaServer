@@ -10,6 +10,7 @@ dotenv.config();
 var questionnaire = require('../routes/questionnaire');
 var auth = require('../routes/auth');
 var profile = require('../routes/profile');
+var answers = require('../routes/answers');
 
 var passport = require("passport");
 
@@ -28,6 +29,7 @@ module.exports = (app, config) => {
   app.use('/auth', auth);
   app.use('/questionnaire', passport.authenticate('jwt', {session: false}), questionnaire);
   app.use('/profile', passport.authenticate('jwt', {session: false}), profile);
+  app.use('/answers', passport.authenticate('jwt', {session: false}), answers);
 
   app.use((req, res, next) => {
     var err = new Error('Not Found');

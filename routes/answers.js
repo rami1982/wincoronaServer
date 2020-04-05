@@ -3,6 +3,12 @@ const Questionnaire = require('../models/questionnaire').Questionnaire;
 const Answers = require('../models/answers').Answers;
 const User = require('../models/user');
 
+router.get('/one_time', (req,res)=>{
+    User.findOne({_id: req.user._id}, (err, user)=>{
+        if(err || !user) res.json({success: false, error: err});
+        return res.json(user.oneTimeQuestionnaire);
+    });
+});
 router.post('/one_time', (req,res)=>{
     User.findOne({_id: req.user._id}, (err, user)=>{
         if(err || !user) res.json({success: false, error: err});
@@ -14,6 +20,12 @@ router.post('/one_time', (req,res)=>{
     });
 });
 
+router.get('/daily', (req,res)=>{
+    User.findOne({_id: req.user._id}, (err, user)=>{
+        if(err || !user) res.json({success: false, error: err});
+        return res.json(user.dailyQuestionnaire);
+    });
+});
 router.post('/daily', (req,res)=>{
     User.findOne({_id: req.user._id}, (err, user)=>{
         if(err || !user) res.json({success: false, error: err});
